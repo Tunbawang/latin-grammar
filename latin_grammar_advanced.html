@@ -79,6 +79,15 @@
   .cell-left { text-align: left; }
   .w-bold { font-weight: 700; }
 
+  /* ---- 増補語行 ---- */
+  tr.supplied td {
+    background: #eaf0ec;
+    color: var(--latin);
+    font-style: italic;
+  }
+  tr.supplied:hover td { background: #d8e8dc; transition: background 0.15s; }
+  tr.supplied .w-bold { font-style: italic; color: var(--latin); font-weight: 700; }
+
   /* ---- 言語表示制御 ---- */
   .txt-ja, .txt-lat, .txt-en, .txt-zh { display: none; }
 
@@ -121,14 +130,34 @@
     padding: 8px 16px; cursor: pointer; border-radius: 3px;
     transition: background 0.15s, color 0.15s;
   }
-  .copy-btn:hover { background: var(--accent); color: #fff; }
-  .copy-btn svg { width: 14px; height: 14px; fill: currentColor; }
+  .sentence-augmented {
+    font-size: 0.88rem; color: var(--latin); line-height: 1.8;
+    margin-bottom: 12px; padding-left: 13px; font-style: italic;
+  }
+  .sentence-augmented .aug {
+    font-style: italic; color: var(--accent); font-weight: 600;
+  }
+  .aug-label {
+    font-size: 0.72rem; color: var(--border); font-style: normal;
+    display: block; margin-bottom: 2px; padding-left: 13px;
+    letter-spacing: 0.05em;
+  }
+  .aug-block { display: none; }
+  body.mode-ja   .aug-block,
+  body.mode-both .aug-block,
+  body.mode-lat  .aug-block,
+  body.mode-en   .aug-block,
+  body.mode-zh   .aug-block { display: block; }
 </style>
 </head>
 <body class="mode-both">
 <div class="container">
   <h1 id="page-title">ラテン語文法図示表</h1>
   <p class="sentence">Gallia est omnis dīvīsa in partēs trēs, quārum ūnam incolunt Belgae, aliam Aquītānī, tertiam quī ipsōrum linguā Celtae, nostrā Gallī appellantur.</p>
+  <div class="aug-block">
+    <span class="aug-label">増補文 · sententia aucta · augmented sentence · 增补句</span>
+    <p class="sentence-augmented">Gallia est omnis dīvīsa in partēs trēs, quārum ūnam <span class="aug">⟨partem⟩</span> incolunt Belgae, aliam <span class="aug">⟨partem⟩</span> <span class="aug">⟨incolunt⟩</span> Aquītānī, tertiam <span class="aug">⟨partem⟩</span> <span class="aug">⟨eī⟩</span> quī ipsōrum linguā Celtae, nostrā <span class="aug">⟨linguā⟩</span> Gallī appellantur.</p>
+  </div>
   <p class="sentence translation trans-ja">ガリアは全体が三つの部分に分けられており、その一つにはベルガエ人が、別の一つにはアクィタニア人が、三番目には彼ら自身の言語でケルタエ、我々の言語でガリーと呼ばれる者が住んでいる。</p>
   <p class="sentence translation trans-lat" style="font-style:normal;">Ἡ Γαλατία ὅλη εἰς τρία μέρη διῄρηται, ὧν ἓν οἱ Βέλγαι κατοικοῦσιν, ἄλλο οἱ Ἀκυιτανοί, τρίτον οἱ τῇ μὲν ἰδίᾳ γλώσσῃ Κελταί, τῇ δὲ ἡμετέρᾳ Γαλάται καλούμενοι.</p>
   <p class="sentence translation trans-en">Gaul as a whole is divided into three parts, one of which the Belgae inhabit, another the Aquitani, and the third those who in their own language are called Celts, in ours Gauls.</p>
@@ -608,10 +637,48 @@
     <span class="txt-zh">阴性</span>
   </td>
   <td class="cell-left">
-    <span class="txt-ja">基数詞「一つを」省略されたpartemにかかる</span>
-    <span class="txt-lat">numerale cardinale ("unam"); partem omissam modificat</span>
-    <span class="txt-en">cardinal numeral ("one"); modifies omitted "partem"</span>
-    <span class="txt-zh">基数词（"一个"）；修饰省略的"partem"</span>
+    <span class="txt-ja">基数詞「一つを」増補語⟨partem⟩にかかる</span>
+    <span class="txt-lat">numerale cardinale ("unam"); ⟨partem⟩ additum modificat</span>
+    <span class="txt-en">cardinal numeral ("one"); modifies augmented ⟨partem⟩</span>
+    <span class="txt-zh">基数词（"一个"）；修饰增补词⟨partem⟩</span>
+  </td>
+</tr>
+
+<!-- ⟨partem⟩ §2 supplied -->
+<tr class="supplied">
+  <td class="cell-left">
+    <span class="txt-ja">増補語（目的語）</span>
+    <span class="txt-lat">additum interpretationis causa (obiectum)</span>
+    <span class="txt-en">augmented for analysis (object)</span>
+    <span class="txt-zh">增补词（宾语）</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">⟨partem⟩</td>
+  <td>
+    <span class="txt-ja">対格</span>
+    <span class="txt-lat">accus.</span>
+    <span class="txt-en">acc.</span>
+    <span class="txt-zh">宾格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">名詞・第3変化 incoluntの目的語；ūnamが修飾；in partēs trēs（§1）のpartēsと同根</span>
+    <span class="txt-lat">nomen; decl. III; obiectum verbi "incolunt"; a "ūnam" modificatur; idem nomen ac "partēs" in §1</span>
+    <span class="txt-en">noun; 3rd decl.; object of "incolunt"; modified by "ūnam"; same noun as "partēs" in §1</span>
+    <span class="txt-zh">名词；第三变格；"incolunt"的宾语；被"ūnam"修饰；与§1中"partēs"同词</span>
   </td>
 </tr>
 
@@ -690,20 +757,20 @@
 <!-- §3 -->
 <tr class="section-header">
   <td colspan="13">
-    <span class="txt-ja">§3　関係節2（動詞省略）　aliam Aquītānī</span>
-    <span class="txt-lat">§3　propositio relativa II (verbo omisso)　aliam Aquītānī</span>
-    <span class="txt-en">§3　Relative Clause II (verb omitted)　aliam Aquītānī</span>
-    <span class="txt-zh">§3　关系从句二（动词省略）　aliam Aquītānī</span>
+    <span class="txt-ja">§3　関係節2（動詞増補）　aliam Aquītānī</span>
+    <span class="txt-lat">§3　propositio relativa II (verbo addito interpretationis causa)　aliam Aquītānī</span>
+    <span class="txt-en">§3　Relative Clause II (verb augmented for analysis)　aliam Aquītānī</span>
+    <span class="txt-zh">§3　关系从句二（动词增补）　aliam Aquītānī</span>
   </td>
 </tr>
 
 <!-- aliam -->
 <tr>
   <td class="cell-left">
-    <span class="txt-ja">目的語（incolunt省略）</span>
-    <span class="txt-lat">obiectum (verbo "incolunt" omisso)</span>
-    <span class="txt-en">object ("incolunt" omitted)</span>
-    <span class="txt-zh">宾语（"incolunt"省略）</span>
+    <span class="txt-ja">目的語（⟨incolunt⟩増補）</span>
+    <span class="txt-lat">obiectum (verbo ⟨incolunt⟩ addito)</span>
+    <span class="txt-en">object (⟨incolunt⟩ augmented for analysis)</span>
+    <span class="txt-zh">宾语（⟨incolunt⟩增补）</span>
   </td>
   <td></td><td></td><td></td><td></td><td></td>
   <td class="col-modus-cell"></td>
@@ -728,20 +795,58 @@
     <span class="txt-zh">阴性</span>
   </td>
   <td class="cell-left">
-    <span class="txt-ja">代名詞的形容詞「別の（地域）を」省略されたpartemにかかる</span>
-    <span class="txt-lat">adiectivum pronominale ("aliam"); partem omissam modificat</span>
-    <span class="txt-en">pronominal adj. ("another"); modifies omitted "partem"</span>
-    <span class="txt-zh">代词性形容词（"另一个"）；修饰省略的"partem"</span>
+    <span class="txt-ja">代名詞的形容詞「別の（地域）を」増補語⟨partem⟩にかかる</span>
+    <span class="txt-lat">adiectivum pronominale ("aliam"); ⟨partem⟩ additum modificat</span>
+    <span class="txt-en">pronominal adj. ("another"); modifies augmented ⟨partem⟩</span>
+    <span class="txt-zh">代词性形容词（"另一个"）；修饰增补词⟨partem⟩</span>
+  </td>
+</tr>
+
+<!-- ⟨partem⟩ §3 supplied -->
+<tr class="supplied">
+  <td class="cell-left">
+    <span class="txt-ja">増補語（目的語）</span>
+    <span class="txt-lat">additum interpretationis causa (obiectum)</span>
+    <span class="txt-en">augmented for analysis (object)</span>
+    <span class="txt-zh">增补词（宾语）</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">⟨partem⟩</td>
+  <td>
+    <span class="txt-ja">対格</span>
+    <span class="txt-lat">accus.</span>
+    <span class="txt-en">acc.</span>
+    <span class="txt-zh">宾格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">名詞・第3変化 増補語⟨incolunt⟩の目的語；aliamが修飾</span>
+    <span class="txt-lat">nomen; decl. III; obiectum verbi ⟨incolunt⟩ additi; a "aliam" modificatur</span>
+    <span class="txt-en">noun; 3rd decl.; object of augmented ⟨incolunt⟩; modified by "aliam"</span>
+    <span class="txt-zh">名词；第三变格；增补词⟨incolunt⟩的宾语；被"aliam"修饰</span>
   </td>
 </tr>
 
 <!-- Aquītānī -->
 <tr>
   <td class="cell-left">
-    <span class="txt-ja">主語（incolunt省略）</span>
-    <span class="txt-lat">subiectum (verbo "incolunt" omisso)</span>
-    <span class="txt-en">subject ("incolunt" omitted)</span>
-    <span class="txt-zh">主语（"incolunt"省略）</span>
+    <span class="txt-ja">主語（⟨incolunt⟩増補）</span>
+    <span class="txt-lat">subiectum (verbo ⟨incolunt⟩ addito)</span>
+    <span class="txt-en">subject (⟨incolunt⟩ augmented for analysis)</span>
+    <span class="txt-zh">主语（⟨incolunt⟩增补）</span>
   </td>
   <td></td><td></td><td></td><td></td><td></td>
   <td class="col-modus-cell"></td>
@@ -773,6 +878,61 @@
   </td>
 </tr>
 
+<!-- ⟨incolunt⟩ §3 supplied -->
+<tr class="supplied">
+  <td class="cell-left">
+    <span class="txt-ja">増補語（述語動詞）</span>
+    <span class="txt-lat">additum interpretationis causa (verbum praedicativum)</span>
+    <span class="txt-en">augmented for analysis (predicate verb)</span>
+    <span class="txt-zh">增补词（谓语动词）</span>
+  </td>
+  <td>
+    <span class="txt-ja">3人称</span>
+    <span class="txt-lat">tertia</span>
+    <span class="txt-en">3rd</span>
+    <span class="txt-zh">第三人称</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">能動</span>
+    <span class="txt-lat">activa</span>
+    <span class="txt-en">active</span>
+    <span class="txt-zh">主动态</span>
+  </td>
+  <td>
+    <span class="txt-ja">未完了相</span>
+    <span class="txt-lat">infectum</span>
+    <span class="txt-en">infectum</span>
+    <span class="txt-zh">未完成体</span>
+  </td>
+  <td>
+    <span class="txt-ja">現在</span>
+    <span class="txt-lat">praesens</span>
+    <span class="txt-en">present</span>
+    <span class="txt-zh">现在时</span>
+  </td>
+  <td class="col-modus-cell">
+    <span class="txt-ja">直説法</span>
+    <span class="txt-lat">indic.</span>
+    <span class="txt-en">indic.</span>
+    <span class="txt-zh">直陈式</span>
+  </td>
+  <td class="col-left-cell w-bold">⟨incolunt⟩</td>
+  <td class="col-right-cell"></td>
+  <td></td><td></td><td></td>
+  <td class="cell-left">
+    <span class="txt-ja">他動詞・第3変化「～に住む」§2のincoluntに基づき増補；主語はAquītānī</span>
+    <span class="txt-lat">verbum transitivum; decl. III; ex §2 addito; subiectum "Aquītānī"</span>
+    <span class="txt-en">transitive verb; 3rd conj.; augmented from §2; subject "Aquītānī"</span>
+    <span class="txt-zh">及物动词；第三变位；依§2增补；主语为"Aquītānī"</span>
+  </td>
+</tr>
+
 <!-- §4 -->
 <tr class="section-header">
   <td colspan="13">
@@ -786,10 +946,10 @@
 <!-- tertiam -->
 <tr>
   <td class="cell-left">
-    <span class="txt-ja">目的語（incolunt省略）</span>
-    <span class="txt-lat">obiectum (verbo "incolunt" omisso)</span>
-    <span class="txt-en">object ("incolunt" omitted)</span>
-    <span class="txt-zh">宾语（"incolunt"省略）</span>
+    <span class="txt-ja">目的語（⟨incolunt⟩増補）</span>
+    <span class="txt-lat">obiectum (verbo ⟨incolunt⟩ addito)</span>
+    <span class="txt-en">object (⟨incolunt⟩ augmented for analysis)</span>
+    <span class="txt-zh">宾语（⟨incolunt⟩增补）</span>
   </td>
   <td></td><td></td><td></td><td></td><td></td>
   <td class="col-modus-cell"></td>
@@ -814,10 +974,86 @@
     <span class="txt-zh">阴性</span>
   </td>
   <td class="cell-left">
-    <span class="txt-ja">序数詞「三番目の（地域）を」省略されたpartemにかかる</span>
-    <span class="txt-lat">numerale ordinale ("tertiam"); partem omissam modificat</span>
-    <span class="txt-en">ordinal numeral ("the third"); modifies omitted "partem"</span>
-    <span class="txt-zh">序数词（"第三个"）；修饰省略的"partem"</span>
+    <span class="txt-ja">序数詞「三番目の（地域）を」増補語⟨partem⟩にかかる</span>
+    <span class="txt-lat">numerale ordinale ("tertiam"); ⟨partem⟩ additum modificat</span>
+    <span class="txt-en">ordinal numeral ("the third"); modifies augmented ⟨partem⟩</span>
+    <span class="txt-zh">序数词（"第三个"）；修饰增补词⟨partem⟩</span>
+  </td>
+</tr>
+
+<!-- ⟨partem⟩ §4 supplied -->
+<tr class="supplied">
+  <td class="cell-left">
+    <span class="txt-ja">増補語（目的語）</span>
+    <span class="txt-lat">additum interpretationis causa (obiectum)</span>
+    <span class="txt-en">augmented for analysis (object)</span>
+    <span class="txt-zh">增补词（宾语）</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">⟨partem⟩</td>
+  <td>
+    <span class="txt-ja">対格</span>
+    <span class="txt-lat">accus.</span>
+    <span class="txt-en">acc.</span>
+    <span class="txt-zh">宾格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">名詞・第3変化 ⟨eī⟩ quīを主語とする節全体の目的語；tertiamが修飾</span>
+    <span class="txt-lat">nomen; decl. III; obiectum propositionis cuius subiectum est ⟨eī⟩ quī; a "tertiam" modificatur</span>
+    <span class="txt-en">noun; 3rd decl.; object of the clause whose subject is ⟨eī⟩ quī; modified by "tertiam"</span>
+    <span class="txt-zh">名词；第三变格；以⟨eī⟩ quī为主语的从句的宾语；被"tertiam"修饰</span>
+  </td>
+</tr>
+
+<!-- ⟨eī⟩ supplied -->
+<tr class="supplied">
+  <td class="cell-left">
+    <span class="txt-ja">増補語（先行詞）</span>
+    <span class="txt-lat">additum interpretationis causa (antecedens)</span>
+    <span class="txt-en">augmented for analysis (antecedent)</span>
+    <span class="txt-zh">增补词（先行词）</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">⟨eī⟩</td>
+  <td>
+    <span class="txt-ja">主格</span>
+    <span class="txt-lat">nomin.</span>
+    <span class="txt-en">nom.</span>
+    <span class="txt-zh">主格</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">男性</span>
+    <span class="txt-lat">m.</span>
+    <span class="txt-en">m.</span>
+    <span class="txt-zh">阳性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">指示代名詞（is,ea,id）・第1・2変化 関係代名詞quīの先行詞；英語those whoのthoseに相当；3人称複数の人称代名詞の代用</span>
+    <span class="txt-lat">pronomen demonstrativum (is, ea, id); decl. I/II; antecedens pronominis relativi "quī"; simile structurae "those who" Anglicae; vice pronominis personalis tertiae personae pluralis fungitur</span>
+    <span class="txt-en">demonstrative pronoun (is, ea, id); decl. I/II; antecedent of relative pronoun "quī"; equivalent to "those" in "those who"; substitutes for 3rd person plural personal pronoun</span>
+    <span class="txt-zh">指示代词（is, ea, id）；第一/二变格；关系代词"quī"的先行词；相当于英语"those who"中的"those"；代替第三人称复数人称代词</span>
   </td>
 </tr>
 
@@ -852,10 +1088,10 @@
     <span class="txt-zh">阳性</span>
   </td>
   <td class="cell-left">
-    <span class="txt-ja">関係代名詞 先行詞eī（男性・複数・主格）省略「～する者たちは」</span>
-    <span class="txt-lat">pronomen relativum; antecedens "eī" (m. pl. nomin.) omissum</span>
-    <span class="txt-en">relative pronoun; antecedent "eī" (m. pl. nom.) omitted ("those who")</span>
-    <span class="txt-zh">关系代词；先行词"eī"（阳性复数主格）省略（"那些……的人"）</span>
+    <span class="txt-ja">関係代名詞 先行詞⟨eī⟩は増補語（男性・複数・主格）「～する者たちは」</span>
+    <span class="txt-lat">pronomen relativum; antecedens ⟨eī⟩ (m. pl. nomin.) additum</span>
+    <span class="txt-en">relative pronoun; antecedent ⟨eī⟩ (m. pl. nom.) augmented ("those who")</span>
+    <span class="txt-zh">关系代词；先行词⟨eī⟩（阳性复数主格）为增补词（"那些……的人"）</span>
   </td>
 </tr>
 
@@ -976,10 +1212,10 @@
 <!-- nostrā -->
 <tr>
   <td class="cell-left">
-    <span class="txt-ja">手段の奪格（linguā省略）</span>
-    <span class="txt-lat">ablativus instrumenti (nomine "lingua" omisso)</span>
-    <span class="txt-en">ablative of means ("lingua" omitted)</span>
-    <span class="txt-zh">工具夺格（"lingua"省略）</span>
+    <span class="txt-ja">手段の奪格（⟨linguā⟩増補）</span>
+    <span class="txt-lat">ablativus instrumenti (⟨lingua⟩ addita)</span>
+    <span class="txt-en">ablative of means (⟨linguā⟩ augmented for analysis)</span>
+    <span class="txt-zh">工具夺格（⟨linguā⟩增补）</span>
   </td>
   <td></td><td></td><td></td><td></td><td></td>
   <td class="col-modus-cell"></td>
@@ -1004,10 +1240,48 @@
     <span class="txt-zh">阴性</span>
   </td>
   <td class="cell-left">
-    <span class="txt-ja">所有形容詞・第1・2変化「我々の（言語で）」linguāを省略</span>
-    <span class="txt-lat">adiectivum possessivum; decl. I/II; "nostra (lingua)"; nomen "lingua" omissum</span>
-    <span class="txt-en">possessive adj.; decl. I/II; "in our (language)"; "lingua" omitted</span>
-    <span class="txt-zh">所有形容词；第一/二变格；"用我们的（语言）"；"lingua"省略</span>
+    <span class="txt-ja">所有形容詞・第1・2変化「我々の（言語で）」⟨linguā⟩は増補語</span>
+    <span class="txt-lat">adiectivum possessivum; decl. I/II; "nostra (lingua)"; ⟨lingua⟩ addita</span>
+    <span class="txt-en">possessive adj.; decl. I/II; "in our (language)"; ⟨linguā⟩ augmented</span>
+    <span class="txt-zh">所有形容词；第一/二变格；"用我们的（语言）"；⟨linguā⟩为增补词</span>
+  </td>
+</tr>
+
+<!-- ⟨linguā⟩ supplied -->
+<tr class="supplied">
+  <td class="cell-left">
+    <span class="txt-ja">増補語（手段の奪格）</span>
+    <span class="txt-lat">additum interpretationis causa (abl. instrumenti)</span>
+    <span class="txt-en">augmented for analysis (abl. of means)</span>
+    <span class="txt-zh">增补词（工具夺格）</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">⟨linguā⟩</td>
+  <td>
+    <span class="txt-ja">奪格</span>
+    <span class="txt-lat">abl.</span>
+    <span class="txt-en">abl.</span>
+    <span class="txt-zh">夺格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">名詞・第1変化 手段の奪格「（我々の）言語で」；nostrāが修飾；ipsōrum linguāと対応する並行構造</span>
+    <span class="txt-lat">nomen; decl. I; ablativus instrumenti; a "nostrā" modificatur; structura parallela cum "ipsōrum linguā"</span>
+    <span class="txt-en">noun; 1st decl.; abl. of means ("in our language"); modified by "nostrā"; parallel structure to "ipsōrum linguā"</span>
+    <span class="txt-zh">名词；第一变格；工具夺格（"用我们的语言"）；被"nostrā"修饰；与"ipsōrum linguā"构成平行结构</span>
   </td>
 </tr>
 
