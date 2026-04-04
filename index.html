@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grammatica Latina</title>
+<style>
+  :root {
+    --bg: #faf9f6;
+    --border: #c8c0b0;
+    --header-bg: #f0ece3;
+    --text: #2a2318;
+    --accent: #6b5c3e;
+    --latin: #7a6a50;
+    --divider: #5a4a30;
+    --font-body: 'Noto Serif JP', 'Yu Mincho', 'YuMincho', '游明朝', serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+  .container {
+    max-width: 640px;
+    width: 100%;
+  }
+  .site-title {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 4px;
+  }
+  .site-subtitle {
+    font-size: 0.85rem;
+    color: var(--latin);
+    font-style: italic;
+    margin-bottom: 28px;
+    padding-left: 2px;
+  }
+  .lang-switcher {
+    display: flex; gap: 6px; margin-bottom: 28px; flex-wrap: wrap;
+  }
+  .lang-btn {
+    background: none; border: 1.5px solid var(--accent); color: var(--accent);
+    font-family: var(--font-body); font-size: 0.82rem;
+    padding: 5px 14px; cursor: pointer; border-radius: 3px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .lang-btn:hover { background: var(--accent); color: #fff; }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+  .sentence {
+    font-size: 0.88rem;
+    color: var(--latin);
+    font-style: italic;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--border);
+    background: var(--header-bg);
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .card {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    background: #fff;
+    padding: 22px 26px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    background: var(--header-bg);
+  }
+  .card-label {
+    font-size: 0.70rem;
+    color: var(--latin);
+    font-style: italic;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--latin);
+    line-height: 1.6;
+  }
+  .card-arrow {
+    float: right;
+    font-size: 1rem;
+    color: var(--border);
+    margin-top: -1.4rem;
+    transition: color 0.15s;
+  }
+  .card:hover .card-arrow {
+    color: var(--accent);
+  }
+  footer {
+    margin-top: 48px;
+    font-size: 0.72rem;
+    color: var(--border);
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* 言語表示制御 */
+  .txt-ja, .txt-lat, .txt-en, .txt-zh { display: none; }
+  body.mode-ja  .txt-ja  { display: inline; }
+  body.mode-lat .txt-lat { display: inline; }
+  body.mode-en  .txt-en  { display: inline; }
+  body.mode-zh  .txt-zh  { display: inline; }
+
+  /* ブロック要素用 */
+  .btxt-ja, .btxt-lat, .btxt-en, .btxt-zh { display: none; }
+  body.mode-ja  .btxt-ja  { display: block; }
+  body.mode-lat .btxt-lat { display: block; }
+  body.mode-en  .btxt-en  { display: block; }
+  body.mode-zh  .btxt-zh  { display: block; }
+</style>
+</head>
+<body class="mode-ja">
+<div class="container">
+
+  <h1 class="site-title">Grammatica Latina</h1>
+  <p class="site-subtitle">
+    <span class="txt-ja">ラテン語文法資料集</span>
+    <span class="txt-lat">Subsidia Grammatica Latina</span>
+    <span class="txt-en">Latin Grammar Resources</span>
+    <span class="txt-zh">拉丁语语法资料集</span>
+  </p>
+
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('ja')">日本語</button>
+    <button class="lang-btn" onclick="setLang('lat')">Latine</button>
+    <button class="lang-btn" onclick="setLang('en')">English</button>
+    <button class="lang-btn" onclick="setLang('zh')">中文</button>
+  </div>
+
+  <p class="sentence">Gallia est omnis dīvīsa in partēs trēs, quārum ūnam incolunt Belgae, aliam Aquītānī, tertiam quī ipsōrum linguā Celtae, nostrā Gallī appellantur.</p>
+
+  <div class="cards">
+
+    <a class="card" href="latin_grammar_advanced.html">
+      <div class="card-label">
+        <span class="txt-ja">tabula grammatica · ラテン語文法図示表</span>
+        <span class="txt-lat">tabula grammatica</span>
+        <span class="txt-en">Latin Grammar Diagram</span>
+        <span class="txt-zh">拉丁语语法图示表</span>
+      </div>
+      <div class="card-title">
+        <span class="txt-ja">ラテン語文法図示表 — Tabula Grammatica Latina</span>
+        <span class="txt-lat">Tabula Grammatica Latina</span>
+        <span class="txt-en">Latin Grammar Diagram — Tabula Grammatica Latina</span>
+        <span class="txt-zh">拉丁语语法图示表 — Tabula Grammatica Latina</span>
+      </div>
+      <span class="card-arrow">→</span>
+      <div class="card-desc">
+        <span class="btxt-ja">カエサル『ガリア戦記』冒頭文の全単語を品詞・格・数・性・態・時制・法ごとに図示。日本語・Latine・English・中文対応。</span>
+        <span class="btxt-lat">Tabulam grammaticam omnium verborum primi capitis Commentariorum de Bello Gallico praebet. Linguis Iaponice, Latine, Anglice, Sinice scripta.</span>
+        <span class="btxt-en">A grammatical diagram of every word in the opening sentence of Caesar's <i>Gallic War</i>, covering part of speech, case, number, gender, voice, tense, and mood. Available in Japanese, Latin, English, and Chinese.</span>
+        <span class="btxt-zh">凯撒《高卢战记》开篇句全词语法图示，涵盖词性、格、数、性、态、时态、语气。支持日语・拉丁语・英语・中文。</span>
+      </div>
+    </a>
+
+    <a class="card" href="verbalia.html">
+      <div class="card-label">
+        <span class="txt-ja">verbalia latina · ラテン語準動詞一覧</span>
+        <span class="txt-lat">verbalia latina</span>
+        <span class="txt-en">Latin Verbal Forms</span>
+        <span class="txt-zh">拉丁语准动词一览</span>
+      </div>
+      <div class="card-title">
+        <span class="txt-ja">ラテン語準動詞一覧 — Verbalia Latina</span>
+        <span class="txt-lat">Verbalia Latina</span>
+        <span class="txt-en">Latin Verbal Forms — Verbalia Latina</span>
+        <span class="txt-zh">拉丁语准动词一览 — Verbalia Latina</span>
+      </div>
+      <span class="card-arrow">→</span>
+      <div class="card-desc">
+        <span class="btxt-ja">分詞・不定詞・スピーヌム・動名詞・動形容詞の文法範疇を一覧表で比較。日本語・Latine・English・中文対応。</span>
+        <span class="btxt-lat">Categorias grammaticas verbalium (participii, infinitivi, supini, gerundii, gerundivi) in tabula comparat. Linguis Iaponice, Latine, Anglice, Sinice scripta.</span>
+        <span class="btxt-en">Compares the grammatical categories of Latin verbal forms: participle, infinitive, supine, gerund, and gerundive. Available in Japanese, Latin, English, and Chinese.</span>
+        <span class="btxt-zh">以表格比较分词、不定式、目的动名词、动名词、动形容词的语法范畴。支持日语・拉丁语・英语・中文。</span>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>Grammatica Latina · tunbawang.github.io/latin-grammar</footer>
+
+</div>
+
+<script>
+function setLang(lang) {
+  document.body.className = 'mode-' + lang;
+  document.querySelectorAll('.lang-btn').forEach((btn, i) => {
+    const modes = ['ja', 'lat', 'en', 'zh'];
+    btn.classList.toggle('active', modes[i] === lang);
+  });
+}
+</script>
+</body>
+</html>
