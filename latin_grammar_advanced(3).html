@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabula Grammatica Latina — 発展版</title>
+<style>
+  :root {
+    --bg: #faf9f6;
+    --border: #c8c0b0;
+    --header-bg: #f0ece3;
+    --section-bg: #e8e0d0;
+    --text: #2a2318;
+    --accent: #6b5c3e;
+    --latin: #7a6a50;
+    --divider: #5a4a30;
+    --font-body: 'Noto Serif JP', 'Yu Mincho', 'YuMincho', '游明朝', serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1350px; margin: 0 auto; }
+  h1 {
+    font-size: 1rem; font-weight: 400; color: var(--accent);
+    letter-spacing: 0.1em; margin-bottom: 8px;
+    border-left: 3px solid var(--accent); padding-left: 10px;
+  }
+  .sentence {
+    font-size: 0.9rem; color: var(--latin); margin-bottom: 12px;
+    padding-left: 13px; font-style: italic; line-height: 1.7;
+  }
+
+  /* ---- 言語切り替えボタン ---- */
+  .lang-switcher {
+    display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .lang-btn {
+    background: none; border: 1.5px solid var(--accent); color: var(--accent);
+    font-family: var(--font-body); font-size: 0.82rem;
+    padding: 5px 14px; cursor: pointer; border-radius: 3px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .lang-btn:hover { background: var(--accent); color: #fff; }
+  .lang-btn.active { background: var(--accent); color: #fff; }
+
+  .table-wrap { overflow-x: auto; }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.82rem; line-height: 1.5;
+  }
+  thead th {
+    background: var(--header-bg); border: 1px solid var(--border);
+    padding: 7px 9px; text-align: center;
+    font-weight: 600; color: var(--accent); white-space: nowrap;
+  }
+  thead th .sub { display: block; font-size: 0.70rem; font-weight: 400; color: var(--latin); font-style: italic; margin-top: 2px; }
+  thead th .note { display: block; font-size: 0.70rem; font-weight: 400; color: var(--latin); font-style: italic; margin-top: 3px; }
+  thead th .note-lat { display: block; font-size: 0.68rem; font-weight: 400; color: var(--latin); font-style: italic; }
+
+  /* 区切り強線 */
+  thead th.col-modus, tbody td.col-modus-cell { border-right: 2.5px solid var(--divider); }
+  thead th.col-left,  tbody td.col-left-cell  { border-right: 2.5px solid var(--divider); }
+  thead th.col-right, tbody td.col-right-cell { border-right: 2.5px solid var(--divider); }
+  tbody td {
+    border: 1px solid var(--border); padding: 7px 9px;
+    vertical-align: middle; text-align: center; background: #ffffff;
+  }
+  tbody tr:hover td { background: #ece6d9; transition: background 0.15s; }
+  tr.section-header td {
+    background: var(--section-bg); font-weight: 700; font-size: 0.78rem;
+    color: var(--accent); text-align: left; padding: 5px 10px;
+    border: 1px solid var(--border); letter-spacing: 0.05em;
+  }
+  .cell-left { text-align: left; }
+  .w-bold { font-weight: 700; }
+
+  /* ---- 言語表示制御 ---- */
+  .txt-ja, .txt-lat, .txt-en, .txt-zh { display: none; }
+
+  /* 訳文表示制御 */
+  .translation { display: none; }
+  body.mode-ja   .trans-ja  { display: block; }
+  body.mode-both .trans-ja  { display: block; }
+  body.mode-lat  .trans-lat { display: block; font-style: normal; }
+  body.mode-en   .trans-en  { display: block; }
+  body.mode-zh   .trans-zh  { display: block; }
+
+  /* both = 日羅 */
+  body.mode-both .txt-ja  { display: block; }
+  body.mode-both .txt-lat { display: block; font-size: 0.72rem; color: var(--latin); font-style: italic; }
+
+  body.mode-ja  .txt-ja  { display: block; }
+  body.mode-lat .txt-lat { display: block; }
+  body.mode-en  .txt-en  { display: block; }
+  body.mode-zh  .txt-zh  { display: block; }
+
+  /* thead の表示制御 */
+  .th-ja, .th-lat, .th-en, .th-zh, .th-note, .th-note-lat, .th-note-en, .th-note-zh { display: none; }
+
+  body.mode-ja   .th-ja       { display: block; }
+  body.mode-ja   .th-note     { display: block; font-size: 0.70rem; font-weight: 400; color: var(--latin); font-style: italic; margin-top: 3px; }
+  body.mode-lat  .th-lat      { display: block; }
+  body.mode-lat  .th-note-lat { display: block; font-size: 0.70rem; font-weight: 400; color: var(--latin); font-style: italic; margin-top: 3px; }
+  body.mode-en   .th-en       { display: block; }
+  body.mode-en   .th-note-en  { display: block; font-size: 0.70rem; font-weight: 400; color: var(--latin); font-style: italic; margin-top: 3px; }
+  body.mode-zh   .th-zh       { display: block; }
+  body.mode-zh   .th-note-zh  { display: block; font-size: 0.70rem; font-weight: 400; color: var(--latin); font-style: italic; margin-top: 3px; }
+  body.mode-both .th-ja       { display: block; }
+  body.mode-both .th-lat      { display: block; font-size: 0.68rem; font-weight: 400; color: var(--latin); font-style: italic; }
+  body.mode-both .th-note     { display: block; font-size: 0.70rem; font-weight: 400; color: var(--latin); font-style: italic; margin-top: 3px; }
+
+  .copy-btn {
+    margin-top: 14px; display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: 1.5px solid var(--accent); color: var(--accent);
+    font-family: var(--font-body); font-size: 0.85rem;
+    padding: 8px 16px; cursor: pointer; border-radius: 3px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .copy-btn:hover { background: var(--accent); color: #fff; }
+  .copy-btn svg { width: 14px; height: 14px; fill: currentColor; }
+</style>
+</head>
+<body class="mode-both">
+<div class="container">
+  <h1 id="page-title">ラテン語文法解析表</h1>
+  <p class="sentence">Gallia est omnis dīvīsa in partēs trēs, quārum ūnam incolunt Belgae, aliam Aquītānī, tertiam quī ipsōrum linguā Celtae, nostrā Gallī appellantur.</p>
+  <p class="sentence translation trans-ja">ガリア全体は三つの部分に分けられており、その一つにはベルガエ人が、別の一つにはアクィタニア人が、三番目には彼ら自身の言語でケルタエ、我々の言語でガリーと呼ばれる者たちが住んでいる。</p>
+  <p class="sentence translation trans-lat" style="font-style:normal;">Ἡ Γαλατία ὅλη εἰς τρία μέρη διῄρηται, ὧν ἓν οἱ Βέλγαι κατοικοῦσιν, ἄλλο οἱ Ἀκυιτανοί, τρίτον οἱ τῇ μὲν ἰδίᾳ γλώσσῃ Κελταί, τῇ δὲ ἡμετέρᾳ Γαλάται καλούμενοι.</p>
+  <p class="sentence translation trans-en">Gaul as a whole is divided into three parts, one of which the Belgae inhabit, another the Aquitani, and the third those who in their own language are called Celts, in ours Gauls.</p>
+  <p class="sentence translation trans-zh">高卢整体上被分为三个部分：其中一部分由贝尔盖人居住，另一部分由阿基坦人居住，第三部分由那些在他们自己的语言中被称为凯尔特人、在我们的语言中被称为高卢人的人们居住。</p>
+
+  <div class="lang-switcher">
+    <button class="lang-btn" onclick="setLang('ja')">日本語</button>
+    <button class="lang-btn active" onclick="setLang('both')">日本語・ラテン語</button>
+    <button class="lang-btn" onclick="setLang('lat')">Latine</button>
+    <button class="lang-btn" onclick="setLang('en')">English</button>
+    <button class="lang-btn" onclick="setLang('zh')">中文</button>
+  </div>
+
+  <div class="table-wrap">
+  <table>
+  <thead>
+  <tr>
+    <th style="text-align:left">
+      <span class="th-ja">解説</span>
+      <span class="th-lat">explanatio</span>
+      <span class="th-en">Notes</span>
+      <span class="th-zh">注释</span>
+    </th>
+    <th>
+      <span class="th-ja">人称</span>
+      <span class="th-lat">persona</span>
+      <span class="th-en">Person</span>
+      <span class="th-zh">人称</span>
+      <span class="th-note">3択</span>
+      <span class="th-note-lat">3 opt.</span>
+      <span class="th-note-en">3 opt.</span>
+      <span class="th-note-zh">3选</span>
+    </th>
+    <th>
+      <span class="th-ja">数</span>
+      <span class="th-lat">numerus</span>
+      <span class="th-en">Number</span>
+      <span class="th-zh">数</span>
+      <span class="th-note">2択</span>
+      <span class="th-note-lat">2 opt.</span>
+      <span class="th-note-en">2 opt.</span>
+      <span class="th-note-zh">2选</span>
+    </th>
+    <th>
+      <span class="th-ja">態</span>
+      <span class="th-lat">vox</span>
+      <span class="th-en">Voice</span>
+      <span class="th-zh">态</span>
+      <span class="th-note">2択</span>
+      <span class="th-note-lat">2 opt.</span>
+      <span class="th-note-en">2 opt.</span>
+      <span class="th-note-zh">2选</span>
+    </th>
+    <th>
+      <span class="th-ja">相</span>
+      <span class="th-lat">aspectus</span>
+      <span class="th-en">Aspect</span>
+      <span class="th-zh">体</span>
+      <span class="th-note">2択</span>
+      <span class="th-note-lat">2 opt.</span>
+      <span class="th-note-en">2 opt.</span>
+      <span class="th-note-zh">2选</span>
+    </th>
+    <th>
+      <span class="th-ja">時制</span>
+      <span class="th-lat">tempus</span>
+      <span class="th-en">Tense</span>
+      <span class="th-zh">时态</span>
+      <span class="th-note">3/4/6択</span>
+      <span class="th-note-lat">3/4/6 opt.</span>
+      <span class="th-note-en">3/4/6 opt.</span>
+      <span class="th-note-zh">3/4/6选</span>
+    </th>
+    <th class="col-modus">
+      <span class="th-ja">法</span>
+      <span class="th-lat">modus</span>
+      <span class="th-en">Mood</span>
+      <span class="th-zh">语气</span>
+      <span class="th-note">3択</span>
+      <span class="th-note-lat">3 opt.</span>
+      <span class="th-note-en">3 opt.</span>
+      <span class="th-note-zh">3选</span>
+    </th>
+    <th class="col-left">
+      <span class="th-ja">左</span>
+      <span class="th-lat">sinister</span>
+      <span class="th-en">Left</span>
+      <span class="th-zh">左</span>
+      <span class="th-note">6範疇</span>
+      <span class="th-note-lat">6 categ.</span>
+      <span class="th-note-en">6 categ.</span>
+      <span class="th-note-zh">6类</span>
+    </th>
+    <th class="col-right">
+      <span class="th-ja">右</span>
+      <span class="th-lat">dexter</span>
+      <span class="th-en">Right</span>
+      <span class="th-zh">右</span>
+      <span class="th-note">3範疇</span>
+      <span class="th-note-lat">3 categ.</span>
+      <span class="th-note-en">3 categ.</span>
+      <span class="th-note-zh">3类</span>
+    </th>
+    <th>
+      <span class="th-ja">格</span>
+      <span class="th-lat">casus</span>
+      <span class="th-en">Case</span>
+      <span class="th-zh">格</span>
+      <span class="th-note">6択</span>
+      <span class="th-note-lat">6 opt.</span>
+      <span class="th-note-en">6 opt.</span>
+      <span class="th-note-zh">6选</span>
+    </th>
+    <th>
+      <span class="th-ja">数</span>
+      <span class="th-lat">numerus</span>
+      <span class="th-en">Number</span>
+      <span class="th-zh">数</span>
+      <span class="th-note">2択</span>
+      <span class="th-note-lat">2 opt.</span>
+      <span class="th-note-en">2 opt.</span>
+      <span class="th-note-zh">2选</span>
+    </th>
+    <th>
+      <span class="th-ja">性</span>
+      <span class="th-lat">genus</span>
+      <span class="th-en">Gender</span>
+      <span class="th-zh">性</span>
+      <span class="th-note">3択</span>
+      <span class="th-note-lat">3 opt.</span>
+      <span class="th-note-en">3 opt.</span>
+      <span class="th-note-zh">3选</span>
+    </th>
+    <th style="text-align:left">
+      <span class="th-ja">解説</span>
+      <span class="th-lat">explanatio</span>
+      <span class="th-en">Notes</span>
+      <span class="th-zh">注释</span>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+
+<!-- §1 -->
+<tr class="section-header">
+  <td colspan="13">
+    <span class="txt-ja">§1　主節　Gallia est omnis divisa in partes tres</span>
+    <span class="txt-lat">§1　propositio principalis　Gallia est omnis divisa in partes tres</span>
+    <span class="txt-en">§1　Main Clause　Gallia est omnis divisa in partes tres</span>
+    <span class="txt-zh">§1　主句　Gallia est omnis divisa in partes tres</span>
+  </td>
+</tr>
+
+<!-- Gallia -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">主語</span>
+    <span class="txt-lat">subiectum</span>
+    <span class="txt-en">subject</span>
+    <span class="txt-zh">主语</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">Gallia</td>
+  <td>
+    <span class="txt-ja">主格</span>
+    <span class="txt-lat">nomin.</span>
+    <span class="txt-en">nom.</span>
+    <span class="txt-zh">主格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">名詞・第1変化 女性名詞</span>
+    <span class="txt-lat">nomen; decl. I; genus femininum</span>
+    <span class="txt-en">noun; 1st decl.; feminine</span>
+    <span class="txt-zh">名词；第一变格；阴性</span>
+  </td>
+</tr>
+
+<!-- est / omnis -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">繋辞</span>
+    <span class="txt-lat">copula</span>
+    <span class="txt-en">copula</span>
+    <span class="txt-zh">系动词</span>
+  </td>
+  <td>
+    <span class="txt-ja">3人称</span>
+    <span class="txt-lat">tertia</span>
+    <span class="txt-en">3rd</span>
+    <span class="txt-zh">第三人称</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">能動</span>
+    <span class="txt-lat">activa</span>
+    <span class="txt-en">active</span>
+    <span class="txt-zh">主动态</span>
+  </td>
+  <td>
+    <span class="txt-ja">未完了相</span>
+    <span class="txt-lat">infectum</span>
+    <span class="txt-en">infectum</span>
+    <span class="txt-zh">未完成体</span>
+  </td>
+  <td>
+    <span class="txt-ja">現在</span>
+    <span class="txt-lat">praesens</span>
+    <span class="txt-en">present</span>
+    <span class="txt-zh">现在时</span>
+  </td>
+  <td class="col-modus-cell">
+    <span class="txt-ja">直説法</span>
+    <span class="txt-lat">indic.</span>
+    <span class="txt-en">indic.</span>
+    <span class="txt-zh">直陈式</span>
+  </td>
+  <td class="col-left-cell w-bold">est</td>
+  <td class="col-right-cell w-bold">omnis</td>
+  <td>
+    <span class="txt-ja">主格</span>
+    <span class="txt-lat">nomin.</span>
+    <span class="txt-en">nom.</span>
+    <span class="txt-zh">主格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">形容詞・第3変化 副詞的（述語的）用法「全体として」、同格あるいは同格における二次的主語　Galliaと性・数・格一致</span>
+    <span class="txt-lat">appositio vel subiectum secundarium in apposito; usus praedicativus ("tota"); genus, numerus, casus cum Gallia conveniunt</span>
+    <span class="txt-en">adj.; 3rd decl.; adverbial-predicative use ("as a whole"); apposition or secondary subject in apposition; agrees with Gallia in gender, number, case</span>
+    <span class="txt-zh">形容词；第三变格；副词性述语用法（"整体上"）；同位语或同位结构中的次要主语；与Gallia在性、数、格上一致</span>
+  </td>
+</tr>
+
+<!-- divisa -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">完了分詞（述語的形容詞用法）</span>
+    <span class="txt-lat">participium perfecti passivi; usus praedicativus</span>
+    <span class="txt-en">perfect passive participle; predicative adjectival use</span>
+    <span class="txt-zh">完成被动分词；述语形容词用法</span>
+  </td>
+  <td>
+    <span class="txt-ja">3人称</span>
+    <span class="txt-lat">tertia</span>
+    <span class="txt-en">3rd</span>
+    <span class="txt-zh">第三人称</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">受動</span>
+    <span class="txt-lat">passiva</span>
+    <span class="txt-en">passive</span>
+    <span class="txt-zh">被动态</span>
+  </td>
+  <td>
+    <span class="txt-ja">完了相</span>
+    <span class="txt-lat">perfectum</span>
+    <span class="txt-en">perfectum</span>
+    <span class="txt-zh">完成体</span>
+  </td>
+  <td>×</td>
+  <td class="col-modus-cell"></td>
+  <td class="w-bold" colspan="2" style="text-align:center; border-right: 2.5px solid var(--divider);">divisa</td>
+  <td>
+    <span class="txt-ja">主格</span>
+    <span class="txt-lat">nomin.</span>
+    <span class="txt-en">nom.</span>
+    <span class="txt-zh">主格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">完了受動分詞・述語的形容詞としての用法（Galliaの状態を説明）Galliaと性・数・格一致</span>
+    <span class="txt-lat">participium perfecti passivi; usus praedicativus (adjectivum praedicativum); Galliae statum describit; genus, numerus, casus cum Gallia conveniunt</span>
+    <span class="txt-en">perf. pass. participle as predicative adj. (describing the state of Gallia); agrees with Gallia in gender, number, case</span>
+    <span class="txt-zh">完成被动分词作述语形容词（描述Gallia的状态）；与Gallia在性、数、格上一致</span>
+  </td>
+</tr>
+
+<!-- in partes -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">前置詞 対格支配</span>
+    <span class="txt-lat">praepositio; regit accusativum</span>
+    <span class="txt-en">preposition governing acc.</span>
+    <span class="txt-zh">介词；支配宾格</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell w-bold">in</td>
+  <td class="col-right-cell w-bold">partes</td>
+  <td>
+    <span class="txt-ja">対格</span>
+    <span class="txt-lat">accus.</span>
+    <span class="txt-en">acc.</span>
+    <span class="txt-zh">宾格</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">名詞・第3変化 inの目的語（対格）</span>
+    <span class="txt-lat">nomen; decl. III; obiectum praep. "in" (accus.)</span>
+    <span class="txt-en">noun; 3rd decl.; object of "in" (acc.)</span>
+    <span class="txt-zh">名词；第三变格；介词"in"的宾语（宾格）</span>
+  </td>
+</tr>
+
+<!-- tres -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">partesに一致</span>
+    <span class="txt-lat">cum "partes" congruens</span>
+    <span class="txt-en">agreeing with "partes"</span>
+    <span class="txt-zh">与"partes"一致</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">tres</td>
+  <td>
+    <span class="txt-ja">対格</span>
+    <span class="txt-lat">accus.</span>
+    <span class="txt-en">acc.</span>
+    <span class="txt-zh">宾格</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">基数詞・第3変化型 partesを修飾</span>
+    <span class="txt-lat">numerale cardinale; decl. III; "partes" modificat</span>
+    <span class="txt-en">cardinal numeral; 3rd decl. type; modifies "partes"</span>
+    <span class="txt-zh">基数词；第三变格型；修饰"partes"</span>
+  </td>
+</tr>
+
+<!-- §2 -->
+<tr class="section-header">
+  <td colspan="13">
+    <span class="txt-ja">§2　関係節1　quārum ūnam incolunt Belgae</span>
+    <span class="txt-lat">§2　propositio relativa I　quārum ūnam incolunt Belgae</span>
+    <span class="txt-en">§2　Relative Clause I　quārum ūnam incolunt Belgae</span>
+    <span class="txt-zh">§2　关系从句一　quārum ūnam incolunt Belgae</span>
+  </td>
+</tr>
+
+<!-- quārum -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">関係代名詞（非継続用法）partesを先行詞とする</span>
+    <span class="txt-lat">pronomen relativum (usus non-continuativus); antecedens "partes"</span>
+    <span class="txt-en">relative pronoun (non-cont. use); antecedent "partes"</span>
+    <span class="txt-zh">关系代词（非连续用法）；先行词为"partes"</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">quārum</td>
+  <td>
+    <span class="txt-ja">属格</span>
+    <span class="txt-lat">gen.</span>
+    <span class="txt-en">gen.</span>
+    <span class="txt-zh">属格</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">関係代名詞・第1・2変化型 非継続用法「そしてそれらの」</span>
+    <span class="txt-lat">pronomen relativum; decl. I/II; usus non-continuativus ("et earum")</span>
+    <span class="txt-en">relative pronoun; decl. I/II; non-continuative ("and of these")</span>
+    <span class="txt-zh">关系代词；第一/二变格；非连续用法（"而其中"）</span>
+  </td>
+</tr>
+
+<!-- ūnam -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">目的語</span>
+    <span class="txt-lat">obiectum</span>
+    <span class="txt-en">object</span>
+    <span class="txt-zh">宾语</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">ūnam</td>
+  <td>
+    <span class="txt-ja">対格</span>
+    <span class="txt-lat">accus.</span>
+    <span class="txt-en">acc.</span>
+    <span class="txt-zh">宾格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">基数詞「一つを」省略されたpartemにかかる</span>
+    <span class="txt-lat">numerale cardinale ("unam"); partem omissam modificat</span>
+    <span class="txt-en">cardinal numeral ("one"); modifies omitted "partem"</span>
+    <span class="txt-zh">基数词（"一个"）；修饰省略的"partem"</span>
+  </td>
+</tr>
+
+<!-- incolunt / Belgae -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">述語動詞 他動詞・第3変化「～に住む」</span>
+    <span class="txt-lat">verbum praedicativum; verbum transitivum; decl. III ("incolere")</span>
+    <span class="txt-en">predicate verb; transitive; 3rd conj. ("to inhabit")</span>
+    <span class="txt-zh">谓语动词；及物动词；第三变位（"居住于"）</span>
+  </td>
+  <td>
+    <span class="txt-ja">3人称</span>
+    <span class="txt-lat">tertia</span>
+    <span class="txt-en">3rd</span>
+    <span class="txt-zh">第三人称</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">能動</span>
+    <span class="txt-lat">activa</span>
+    <span class="txt-en">active</span>
+    <span class="txt-zh">主动态</span>
+  </td>
+  <td>
+    <span class="txt-ja">未完了相</span>
+    <span class="txt-lat">infectum</span>
+    <span class="txt-en">infectum</span>
+    <span class="txt-zh">未完成体</span>
+  </td>
+  <td>
+    <span class="txt-ja">現在</span>
+    <span class="txt-lat">praesens</span>
+    <span class="txt-en">present</span>
+    <span class="txt-zh">现在时</span>
+  </td>
+  <td class="col-modus-cell">
+    <span class="txt-ja">直説法</span>
+    <span class="txt-lat">indic.</span>
+    <span class="txt-en">indic.</span>
+    <span class="txt-zh">直陈式</span>
+  </td>
+  <td class="col-left-cell w-bold">incolunt</td>
+  <td class="col-right-cell w-bold">Belgae</td>
+  <td>
+    <span class="txt-ja">主格</span>
+    <span class="txt-lat">nomin.</span>
+    <span class="txt-en">nom.</span>
+    <span class="txt-zh">主格</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">男性</span>
+    <span class="txt-lat">m.</span>
+    <span class="txt-en">m.</span>
+    <span class="txt-zh">阳性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">主語 固有名詞・第1変化 ベルガエ族</span>
+    <span class="txt-lat">subiectum; nomen proprium; decl. I; gens Belgarum</span>
+    <span class="txt-en">subject; proper noun; 1st decl.; the Belgic people</span>
+    <span class="txt-zh">主语；专有名词；第一变格；贝尔盖人</span>
+  </td>
+</tr>
+
+<!-- §3 -->
+<tr class="section-header">
+  <td colspan="13">
+    <span class="txt-ja">§3　関係節2（動詞省略）　aliam Aquītānī</span>
+    <span class="txt-lat">§3　propositio relativa II (verbo omisso)　aliam Aquītānī</span>
+    <span class="txt-en">§3　Relative Clause II (verb omitted)　aliam Aquītānī</span>
+    <span class="txt-zh">§3　关系从句二（动词省略）　aliam Aquītānī</span>
+  </td>
+</tr>
+
+<!-- aliam -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">目的語（incolunt省略）</span>
+    <span class="txt-lat">obiectum (verbo "incolunt" omisso)</span>
+    <span class="txt-en">object ("incolunt" omitted)</span>
+    <span class="txt-zh">宾语（"incolunt"省略）</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">aliam</td>
+  <td>
+    <span class="txt-ja">対格</span>
+    <span class="txt-lat">accus.</span>
+    <span class="txt-en">acc.</span>
+    <span class="txt-zh">宾格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">代名詞的形容詞「別の（地域）を」省略されたpartemにかかる</span>
+    <span class="txt-lat">adiectivum pronominale ("aliam"); partem omissam modificat</span>
+    <span class="txt-en">pronominal adj. ("another"); modifies omitted "partem"</span>
+    <span class="txt-zh">代词性形容词（"另一个"）；修饰省略的"partem"</span>
+  </td>
+</tr>
+
+<!-- Aquītānī -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">主語（incolunt省略）</span>
+    <span class="txt-lat">subiectum (verbo "incolunt" omisso)</span>
+    <span class="txt-en">subject ("incolunt" omitted)</span>
+    <span class="txt-zh">主语（"incolunt"省略）</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">Aquītānī</td>
+  <td>
+    <span class="txt-ja">主格</span>
+    <span class="txt-lat">nomin.</span>
+    <span class="txt-en">nom.</span>
+    <span class="txt-zh">主格</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">男性</span>
+    <span class="txt-lat">m.</span>
+    <span class="txt-en">m.</span>
+    <span class="txt-zh">阳性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">固有名詞・第2変化 アクィタニア人</span>
+    <span class="txt-lat">nomen proprium; decl. II; gens Aquitanorum</span>
+    <span class="txt-en">proper noun; 2nd decl.; the Aquitanian people</span>
+    <span class="txt-zh">专有名词；第二变格；阿基坦人</span>
+  </td>
+</tr>
+
+<!-- §4 -->
+<tr class="section-header">
+  <td colspan="13">
+    <span class="txt-ja">§4　関係節3　tertiam quī ipsōrum linguā Celtae, nostrā Gallī appellantur</span>
+    <span class="txt-lat">§4　propositio relativa III　tertiam quī ipsōrum linguā Celtae, nostrā Gallī appellantur</span>
+    <span class="txt-en">§4　Relative Clause III　tertiam quī ipsōrum linguā Celtae, nostrā Gallī appellantur</span>
+    <span class="txt-zh">§4　关系从句三　tertiam quī ipsōrum linguā Celtae, nostrā Gallī appellantur</span>
+  </td>
+</tr>
+
+<!-- tertiam -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">目的語（incolunt省略）</span>
+    <span class="txt-lat">obiectum (verbo "incolunt" omisso)</span>
+    <span class="txt-en">object ("incolunt" omitted)</span>
+    <span class="txt-zh">宾语（"incolunt"省略）</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">tertiam</td>
+  <td>
+    <span class="txt-ja">対格</span>
+    <span class="txt-lat">accus.</span>
+    <span class="txt-en">acc.</span>
+    <span class="txt-zh">宾格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">序数詞「三番目の（地域）を」省略されたpartemにかかる</span>
+    <span class="txt-lat">numerale ordinale ("tertiam"); partem omissam modificat</span>
+    <span class="txt-en">ordinal numeral ("the third"); modifies omitted "partem"</span>
+    <span class="txt-zh">序数词（"第三个"）；修饰省略的"partem"</span>
+  </td>
+</tr>
+
+<!-- quī -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">関係代名詞 appellanturの主語</span>
+    <span class="txt-lat">pronomen relativum; subiectum verbi "appellantur"</span>
+    <span class="txt-en">relative pronoun; subject of "appellantur"</span>
+    <span class="txt-zh">关系代词；"appellantur"的主语</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">quī</td>
+  <td>
+    <span class="txt-ja">主格</span>
+    <span class="txt-lat">nomin.</span>
+    <span class="txt-en">nom.</span>
+    <span class="txt-zh">主格</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">男性</span>
+    <span class="txt-lat">m.</span>
+    <span class="txt-en">m.</span>
+    <span class="txt-zh">阳性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">関係代名詞 先行詞eī（男性・複数・主格）省略「～する者たちは」</span>
+    <span class="txt-lat">pronomen relativum; antecedens "eī" (m. pl. nomin.) omissum</span>
+    <span class="txt-en">relative pronoun; antecedent "eī" (m. pl. nom.) omitted ("those who")</span>
+    <span class="txt-zh">关系代词；先行词"eī"（阳性复数主格）省略（"那些……的人"）</span>
+  </td>
+</tr>
+
+<!-- ipsōrum -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">属格修飾語 linguāに係る</span>
+    <span class="txt-lat">genetivus; "linguā" modificat</span>
+    <span class="txt-en">genitive modifier of "linguā"</span>
+    <span class="txt-zh">属格修饰语；修饰"linguā"</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">ipsōrum</td>
+  <td>
+    <span class="txt-ja">属格</span>
+    <span class="txt-lat">gen.</span>
+    <span class="txt-en">gen.</span>
+    <span class="txt-zh">属格</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">男性</span>
+    <span class="txt-lat">m.</span>
+    <span class="txt-en">m.</span>
+    <span class="txt-zh">阳性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">強意代名詞・第1・2変化「彼ら自身の」linguāに係る</span>
+    <span class="txt-lat">pronomen intensivum; decl. I/II; "ipsorum linguā" modificat</span>
+    <span class="txt-en">intensive pronoun; decl. I/II; "in their own language"</span>
+    <span class="txt-zh">强调代词；第一/二变格；"他们自己的语言"</span>
+  </td>
+</tr>
+
+<!-- linguā -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">手段の奪格</span>
+    <span class="txt-lat">ablativus instrumenti</span>
+    <span class="txt-en">ablative of means</span>
+    <span class="txt-zh">工具夺格</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">linguā</td>
+  <td>
+    <span class="txt-ja">奪格</span>
+    <span class="txt-lat">abl.</span>
+    <span class="txt-en">abl.</span>
+    <span class="txt-zh">夺格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">名詞・第1変化「言語で」手段の奪格</span>
+    <span class="txt-lat">nomen; decl. I; abl. instrumenti ("lingua")</span>
+    <span class="txt-en">noun; 1st decl.; abl. of means ("in/by language")</span>
+    <span class="txt-zh">名词；第一变格；工具夺格（"用语言"）</span>
+  </td>
+</tr>
+
+<!-- Celtae -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">appellanturの補語的主格（ipsōrum linguāによる）</span>
+    <span class="txt-lat">nom. praed. verbi "appellantur" (ex "ipsorum lingua")</span>
+    <span class="txt-en">predicative nom. of "appellantur" (by "ipsorum lingua")</span>
+    <span class="txt-zh">"appellantur"的述语主格（依"ipsorum lingua"）</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">Celtae</td>
+  <td>
+    <span class="txt-ja">主格</span>
+    <span class="txt-lat">nomin.</span>
+    <span class="txt-en">nom.</span>
+    <span class="txt-zh">主格</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">男性</span>
+    <span class="txt-lat">m.</span>
+    <span class="txt-en">m.</span>
+    <span class="txt-zh">阳性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">固有名詞・第1変化 quīと性・数・格一致</span>
+    <span class="txt-lat">nomen proprium; decl. I; genus, numerus, casus cum "quī" conveniunt</span>
+    <span class="txt-en">proper noun; 1st decl.; agrees with "quī" in gender, number, case</span>
+    <span class="txt-zh">专有名词；第一变格；与"quī"在性、数、格上一致</span>
+  </td>
+</tr>
+
+<!-- nostrā -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">手段の奪格（linguā省略）</span>
+    <span class="txt-lat">ablativus instrumenti (nomine "lingua" omisso)</span>
+    <span class="txt-en">ablative of means ("lingua" omitted)</span>
+    <span class="txt-zh">工具夺格（"lingua"省略）</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">nostrā</td>
+  <td>
+    <span class="txt-ja">奪格</span>
+    <span class="txt-lat">abl.</span>
+    <span class="txt-en">abl.</span>
+    <span class="txt-zh">夺格</span>
+  </td>
+  <td>
+    <span class="txt-ja">単数</span>
+    <span class="txt-lat">sing.</span>
+    <span class="txt-en">sing.</span>
+    <span class="txt-zh">单数</span>
+  </td>
+  <td>
+    <span class="txt-ja">女性</span>
+    <span class="txt-lat">f.</span>
+    <span class="txt-en">f.</span>
+    <span class="txt-zh">阴性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">所有形容詞・第1・2変化「我々の（言語で）」linguāを省略</span>
+    <span class="txt-lat">adiectivum possessivum; decl. I/II; "nostra (lingua)"; nomen "lingua" omissum</span>
+    <span class="txt-en">possessive adj.; decl. I/II; "in our (language)"; "lingua" omitted</span>
+    <span class="txt-zh">所有形容词；第一/二变格；"用我们的（语言）"；"lingua"省略</span>
+  </td>
+</tr>
+
+<!-- Gallī -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">appellanturの補語的主格（nostrā linguāによる）</span>
+    <span class="txt-lat">nom. praed. verbi "appellantur" (ex "nostra lingua")</span>
+    <span class="txt-en">predicative nom. of "appellantur" (by "nostra lingua")</span>
+    <span class="txt-zh">"appellantur"的述语主格（依"nostra lingua"）</span>
+  </td>
+  <td></td><td></td><td></td><td></td><td></td>
+  <td class="col-modus-cell"></td>
+  <td class="col-left-cell"></td>
+  <td class="col-right-cell w-bold">Gallī</td>
+  <td>
+    <span class="txt-ja">主格</span>
+    <span class="txt-lat">nomin.</span>
+    <span class="txt-en">nom.</span>
+    <span class="txt-zh">主格</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">男性</span>
+    <span class="txt-lat">m.</span>
+    <span class="txt-en">m.</span>
+    <span class="txt-zh">阳性</span>
+  </td>
+  <td class="cell-left">
+    <span class="txt-ja">固有名詞・第2変化 quīと性・数・格一致</span>
+    <span class="txt-lat">nomen proprium; decl. II; genus, numerus, casus cum "quī" conveniunt</span>
+    <span class="txt-en">proper noun; 2nd decl.; agrees with "quī" in gender, number, case</span>
+    <span class="txt-zh">专有名词；第二变格；与"quī"在性、数、格上一致</span>
+  </td>
+</tr>
+
+<!-- appellantur -->
+<tr>
+  <td class="cell-left">
+    <span class="txt-ja">述語動詞</span>
+    <span class="txt-lat">verbum praedicativum</span>
+    <span class="txt-en">predicate verb</span>
+    <span class="txt-zh">谓语动词</span>
+  </td>
+  <td>
+    <span class="txt-ja">3人称</span>
+    <span class="txt-lat">tertia</span>
+    <span class="txt-en">3rd</span>
+    <span class="txt-zh">第三人称</span>
+  </td>
+  <td>
+    <span class="txt-ja">複数</span>
+    <span class="txt-lat">pl.</span>
+    <span class="txt-en">pl.</span>
+    <span class="txt-zh">复数</span>
+  </td>
+  <td>
+    <span class="txt-ja">受動</span>
+    <span class="txt-lat">passiva</span>
+    <span class="txt-en">passive</span>
+    <span class="txt-zh">被动态</span>
+  </td>
+  <td>
+    <span class="txt-ja">未完了相</span>
+    <span class="txt-lat">infectum</span>
+    <span class="txt-en">infectum</span>
+    <span class="txt-zh">未完成体</span>
+  </td>
+  <td>
+    <span class="txt-ja">現在</span>
+    <span class="txt-lat">praesens</span>
+    <span class="txt-en">present</span>
+    <span class="txt-zh">现在时</span>
+  </td>
+  <td class="col-modus-cell">
+    <span class="txt-ja">直説法</span>
+    <span class="txt-lat">indic.</span>
+    <span class="txt-en">indic.</span>
+    <span class="txt-zh">直陈式</span>
+  </td>
+  <td class="col-left-cell w-bold">appellantur</td>
+  <td class="col-right-cell"></td>
+  <td></td><td></td><td></td>
+  <td class="cell-left">
+    <span class="txt-ja">他動詞・第1変化受動「～と呼ばれる」主語quī、補語的主格 (nom. praed.) としてCeltaeおよびGallīが主格をとる</span>
+    <span class="txt-lat">verbum transitivum; decl. I; passivum ("appellari"); subiectum "quī"; Celtae et Gallī nominativi praedicativi</span>
+    <span class="txt-en">transitive verb; 1st conj.; passive ("to be called"); subject "quī"; Celtae and Gallī as predicative nominatives</span>
+    <span class="txt-zh">及物动词；第一变位；被动（"被称为"）；主语"quī"；Celtae和Gallī作述语主格</span>
+  </td>
+</tr>
+
+  </tbody>
+  </table>
+  </div>
+
+  <button class="copy-btn" onclick="copyTSV()">
+    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 2h7a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm0 1v9h7V3H4zM2 4v9h8v1H2a1 1 0 0 1-1-1V4h1z"/>
+    </svg>
+    <span id="tsv-btn-label">TSV をコピー ↗</span>
+  </button>
+</div>
+
+<script>
+let currentLang = 'both';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.body.className = 'mode-' + lang;
+  document.querySelectorAll('.lang-btn').forEach((btn, i) => {
+    const modes = ['ja','both','lat','en','zh'];
+    btn.classList.toggle('active', modes[i] === lang);
+  });
+  const titles = {
+    ja:   'ラテン語文法解析表',
+    both: 'ラテン語文法解析表',
+    lat:  'Tabula Grammatica Latina',
+    en:   'Latin Grammar Analysis Table',
+    zh:   '拉丁语语法分析表'
+  };
+  document.getElementById('page-title').textContent = titles[lang];
+
+  const btnLabels = {
+    ja:   'TSV をコピー ↗',
+    both: 'TSV をコピー ↗',
+    lat:  'TSV describere ↗',
+    en:   'Copy TSV ↗',
+    zh:   '复制 TSV ↗'
+  };
+  document.getElementById('tsv-btn-label').textContent = btnLabels[lang];
+}
+
+function getCell(td, lang) {
+  const span = td.querySelector('.txt-' + lang);
+  if (span) return span.textContent.trim();
+  return td.textContent.trim();
+}
+
+function copyTSV() {
+  const lang = currentLang === 'both' ? 'ja' : currentLang;
+  const rows = document.querySelectorAll('thead tr, tbody tr');
+  const lines = [];
+  rows.forEach(tr => {
+    const cells = tr.querySelectorAll('th, td');
+    const row = [];
+    cells.forEach(td => {
+      const colspan = parseInt(td.getAttribute('colspan') || '1');
+      const txt = getCell(td, lang).replace(/\n/g, ' ');
+      row.push(txt);
+      for (let i = 1; i < colspan; i++) row.push('');
+    });
+    lines.push(row.join('\t'));
+  });
+  const tsv = lines.join('\n');
+  navigator.clipboard.writeText(tsv).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    const label = document.getElementById('tsv-btn-label');
+    const orig = label.textContent;
+    label.textContent = currentLang === 'zh' ? '已复制！' : currentLang === 'en' ? 'Copied!' : currentLang === 'lat' ? 'Descriptum!' : 'コピーしました！';
+    setTimeout(() => { label.textContent = orig; }, 1800);
+  });
+}
+</script>
+</body>
+</html>
