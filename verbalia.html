@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ラテン語準動詞一覧</title>
+<title>Grammatica Latina</title>
 <style>
   :root {
     --bg: #faf9f6;
@@ -20,17 +20,32 @@
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-body);
-    padding: 40px 24px;
     min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
   }
-  .container { max-width: 1100px; margin: 0 auto; }
-  h1 {
-    font-size: 1rem; font-weight: 400; color: var(--accent);
-    letter-spacing: 0.1em; margin-bottom: 14px;
-    border-left: 3px solid var(--accent); padding-left: 10px;
+  .container {
+    max-width: 640px;
+    width: 100%;
+  }
+  .site-title {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 4px;
+  }
+  .site-subtitle {
+    font-size: 0.85rem;
+    color: var(--latin);
+    font-style: italic;
+    margin-bottom: 28px;
+    padding-left: 2px;
   }
   .lang-switcher {
-    display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap;
+    display: flex; gap: 6px; margin-bottom: 28px; flex-wrap: wrap;
   }
   .lang-btn {
     background: none; border: 1.5px solid var(--accent); color: var(--accent);
@@ -40,57 +55,96 @@
   }
   .lang-btn:hover { background: var(--accent); color: #fff; }
   .lang-btn.active { background: var(--accent); color: #fff; }
-  .table-wrap { overflow-x: auto; }
-  table {
-    width: 100%; border-collapse: collapse;
-    font-size: 0.82rem; line-height: 1.5;
+  .sentence {
+    font-size: 0.88rem;
+    color: var(--latin);
+    font-style: italic;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--border);
+    background: var(--header-bg);
   }
-  thead th {
-    background: var(--header-bg); border: 1px solid var(--border);
-    padding: 7px 9px; text-align: center;
-    font-weight: 600; color: var(--accent); white-space: nowrap;
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
-  tbody td {
-    border: 1px solid var(--border); padding: 7px 9px;
-    vertical-align: middle; text-align: center; background: #ffffff;
+  .card {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    background: #fff;
+    padding: 22px 26px;
+    transition: border-color 0.15s, background 0.15s;
   }
-  tbody tr:hover td { background: #ece6d9; transition: background 0.15s; }
-  td:first-child { text-align: left; font-weight: 600; white-space: nowrap; }
-  td.cross { color: #aaa; }
-  td.val { color: var(--text); }
-  td.categ { color: var(--accent); font-weight: 700; }
-  td.zero { color: #aaa; }
-  th.sep, td.sep { border-right: 2.5px solid var(--divider); }
+  .card:hover {
+    border-color: var(--accent);
+    background: var(--header-bg);
+  }
+  .card-label {
+    font-size: 0.70rem;
+    color: var(--latin);
+    font-style: italic;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--latin);
+    line-height: 1.6;
+  }
+  .card-arrow {
+    float: right;
+    font-size: 1rem;
+    color: var(--border);
+    margin-top: -1.4rem;
+    transition: color 0.15s;
+  }
+  .card:hover .card-arrow {
+    color: var(--accent);
+  }
+  footer {
+    margin-top: 48px;
+    font-size: 0.72rem;
+    color: var(--border);
+    text-align: center;
+    font-style: italic;
+  }
 
   /* 言語表示制御 */
-  .v-ja, .v-lat, .v-en, .v-zh { display: none; }
-  body.mode-ja  .v-ja  { display: inline; }
-  body.mode-lat .v-lat { display: inline; }
-  body.mode-en  .v-en  { display: inline; }
-  body.mode-zh  .v-zh  { display: inline; }
+  .txt-ja, .txt-lat, .txt-en, .txt-zh { display: none; }
+  body.mode-ja  .txt-ja  { display: inline; }
+  body.mode-lat .txt-lat { display: inline; }
+  body.mode-en  .txt-en  { display: inline; }
+  body.mode-zh  .txt-zh  { display: inline; }
 
-  /* thead sub-label */
-  .sub { display: block; font-size: 0.70rem; font-weight: 400; color: var(--latin); font-style: italic; margin-top: 2px; }
-  .sub-ja, .sub-lat, .sub-en, .sub-zh { display: none; font-size: 0.70rem; font-weight: 400; color: var(--latin); font-style: italic; margin-top: 2px; }
-  body.mode-ja  .sub-ja  { display: block; }
-  body.mode-lat .sub-lat { display: block; }
-  body.mode-en  .sub-en  { display: block; }
-  body.mode-zh  .sub-zh  { display: block; }
-
-  .copy-btn {
-    margin-top: 16px; display: inline-flex; align-items: center; gap: 6px;
-    background: none; border: 1.5px solid var(--accent); color: var(--accent);
-    font-family: var(--font-body); font-size: 0.85rem;
-    padding: 8px 16px; cursor: pointer; border-radius: 3px;
-    transition: background 0.15s, color 0.15s;
-  }
-  .copy-btn:hover { background: var(--accent); color: #fff; }
-  .copy-btn svg { width: 14px; height: 14px; fill: currentColor; }
+  /* ブロック要素用 */
+  .btxt-ja, .btxt-lat, .btxt-en, .btxt-zh { display: none; }
+  body.mode-ja  .btxt-ja  { display: block; }
+  body.mode-lat .btxt-lat { display: block; }
+  body.mode-en  .btxt-en  { display: block; }
+  body.mode-zh  .btxt-zh  { display: block; }
 </style>
 </head>
 <body class="mode-ja">
 <div class="container">
-  <h1 id="page-title">ラテン語準動詞一覧 — Verbalia Latina</h1>
+
+  <h1 class="site-title">Grammatica Latina</h1>
+  <p class="site-subtitle">
+    <span class="txt-ja">ラテン語文法資料集</span>
+    <span class="txt-lat">Subsidia Grammatica Latina</span>
+    <span class="txt-en">Latin Grammar Resources</span>
+    <span class="txt-zh">拉丁语语法资料集</span>
+  </p>
 
   <div class="lang-switcher">
     <button class="lang-btn active" onclick="setLang('ja')">日本語</button>
@@ -99,298 +153,66 @@
     <button class="lang-btn" onclick="setLang('zh')">中文</button>
   </div>
 
-  <div class="table-wrap">
-  <table>
-  <thead>
-  <tr>
-    <th style="text-align:left">
-      <span class="v-ja">準動詞</span><span class="v-lat">verbale</span><span class="v-en">Verbal</span><span class="v-zh">准动词</span>
-      <span class="sub-ja">verbale</span><span class="sub-lat">—</span><span class="sub-en">verbale</span><span class="sub-zh">verbale</span>
-    </th>
-    <th>
-      <span class="v-ja">人称</span><span class="v-lat">persona</span><span class="v-en">Person</span><span class="v-zh">人称</span>
-      <span class="sub-ja">persona</span><span class="sub-lat">—</span><span class="sub-en">persona</span><span class="sub-zh">persona</span>
-    </th>
-    <th>
-      <span class="v-ja">数(v.)</span><span class="v-lat">numerus (v.)</span><span class="v-en">Number (v.)</span><span class="v-zh">数(v.)</span>
-      <span class="sub-ja">numerus</span><span class="sub-lat">—</span><span class="sub-en">numerus</span><span class="sub-zh">numerus</span>
-    </th>
-    <th>
-      <span class="v-ja">態</span><span class="v-lat">vox</span><span class="v-en">Voice</span><span class="v-zh">态</span>
-      <span class="sub-ja">vox</span><span class="sub-lat">—</span><span class="sub-en">vox</span><span class="sub-zh">vox</span>
-    </th>
-    <th>
-      <span class="v-ja">相</span><span class="v-lat">aspectus</span><span class="v-en">Aspect</span><span class="v-zh">体</span>
-      <span class="sub-ja">aspectus</span><span class="sub-lat">—</span><span class="sub-en">aspectus</span><span class="sub-zh">aspectus</span>
-    </th>
-    <th>
-      <span class="v-ja">時制</span><span class="v-lat">tempus</span><span class="v-en">Tense</span><span class="v-zh">时态</span>
-      <span class="sub-ja">tempus</span><span class="sub-lat">—</span><span class="sub-en">tempus</span><span class="sub-zh">tempus</span>
-    </th>
-    <th class="sep">
-      <span class="v-ja">法</span><span class="v-lat">modus</span><span class="v-en">Mood</span><span class="v-zh">语气</span>
-      <span class="sub-ja">modus</span><span class="sub-lat">—</span><span class="sub-en">modus</span><span class="sub-zh">modus</span>
-    </th>
-    <th>
-      <span class="v-ja">左</span><span class="v-lat">sinister</span><span class="v-en">Left</span><span class="v-zh">左</span>
-      <span class="sub-ja">6範疇</span><span class="sub-lat">6 categ.</span><span class="sub-en">6 categ.</span><span class="sub-zh">6类</span>
-    </th>
-    <th class="sep">
-      <span class="v-ja">右</span><span class="v-lat">dexter</span><span class="v-en">Right</span><span class="v-zh">右</span>
-      <span class="sub-ja">3範疇</span><span class="sub-lat">3 categ.</span><span class="sub-en">3 categ.</span><span class="sub-zh">3类</span>
-    </th>
-    <th>
-      <span class="v-ja">格</span><span class="v-lat">casus</span><span class="v-en">Case</span><span class="v-zh">格</span>
-      <span class="sub-ja">casus</span><span class="sub-lat">—</span><span class="sub-en">casus</span><span class="sub-zh">casus</span>
-    </th>
-    <th>
-      <span class="v-ja">数(n.)</span><span class="v-lat">numerus (n.)</span><span class="v-en">Number (n.)</span><span class="v-zh">数(n.)</span>
-      <span class="sub-ja">numerus</span><span class="sub-lat">—</span><span class="sub-en">numerus</span><span class="sub-zh">numerus</span>
-    </th>
-    <th>
-      <span class="v-ja">性</span><span class="v-lat">genus</span><span class="v-en">Gender</span><span class="v-zh">性</span>
-      <span class="sub-ja">genus</span><span class="sub-lat">—</span><span class="sub-en">genus</span><span class="sub-zh">genus</span>
-    </th>
-  </tr>
-  </thead>
-  <tbody>
+  <p class="sentence">Gallia est omnis dīvīsa in partēs trēs, quārum ūnam incolunt Belgae, aliam Aquītānī, tertiam quī ipsōrum linguā Celtae, nostrā Gallī appellantur.</p>
 
-  <!-- 分詞 participium -->
-  <tr>
-    <td>
-      <span class="v-ja">分詞<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">participium</span></span>
-      <span class="v-lat">participium</span>
-      <span class="v-en">Participle<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">participium</span></span>
-      <span class="v-zh">分词<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">participium</span></span>
-    </td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="val">
-      <span class="v-ja">2択<br><span style="font-size:0.70rem;color:var(--latin)">能動/受動</span></span>
-      <span class="v-lat">2 opt.<br><span style="font-size:0.70rem;color:var(--latin)">act./pass.</span></span>
-      <span class="v-en">2 opt.<br><span style="font-size:0.70rem;color:var(--latin)">act./pass.</span></span>
-      <span class="v-zh">2选<br><span style="font-size:0.70rem;color:var(--latin)">主动/被动</span></span>
-    </td>
-    <td class="val">
-      <span class="v-ja">2択<br><span style="font-size:0.70rem;color:var(--latin)">完了/×</span></span>
-      <span class="v-lat">2 opt.<br><span style="font-size:0.70rem;color:var(--latin)">perf./×</span></span>
-      <span class="v-en">2 opt.<br><span style="font-size:0.70rem;color:var(--latin)">perf./×</span></span>
-      <span class="v-zh">2选<br><span style="font-size:0.70rem;color:var(--latin)">完成/×</span></span>
-    </td>
-    <td class="val">
-      <span class="v-ja">3択<br><span style="font-size:0.70rem;color:var(--latin)">現在/未来/×</span></span>
-      <span class="v-lat">3 opt.<br><span style="font-size:0.70rem;color:var(--latin)">praes./fut./×</span></span>
-      <span class="v-en">3 opt.<br><span style="font-size:0.70rem;color:var(--latin)">pres./fut./×</span></span>
-      <span class="v-zh">3选<br><span style="font-size:0.70rem;color:var(--latin)">现在/将来/×</span></span>
-    </td>
-    <td class="cross sep">×</td>
-    <td class="categ">
-      <span class="v-ja">3範疇</span><span class="v-lat">3 categ.</span><span class="v-en">3 categ.</span><span class="v-zh">3类</span>
-    </td>
-    <td class="categ sep">
-      <span class="v-ja">3範疇</span><span class="v-lat">3 categ.</span><span class="v-en">3 categ.</span><span class="v-zh">3类</span>
-    </td>
-    <td class="val">
-      <span class="v-ja">6択</span><span class="v-lat">6 opt.</span><span class="v-en">6 opt.</span><span class="v-zh">6选</span>
-    </td>
-    <td class="val">
-      <span class="v-ja">2択</span><span class="v-lat">2 opt.</span><span class="v-en">2 opt.</span><span class="v-zh">2选</span>
-    </td>
-    <td class="val">
-      <span class="v-ja">3択</span><span class="v-lat">3 opt.</span><span class="v-en">3 opt.</span><span class="v-zh">3选</span>
-    </td>
-  </tr>
+  <div class="cards">
 
-  <!-- 不定詞 infinitivus -->
-  <tr>
-    <td>
-      <span class="v-ja">不定詞<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">infinitivus</span></span>
-      <span class="v-lat">infinitivus</span>
-      <span class="v-en">Infinitive<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">infinitivus</span></span>
-      <span class="v-zh">不定式<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">infinitivus</span></span>
-    </td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="val">
-      <span class="v-ja">2択<br><span style="font-size:0.70rem;color:var(--latin)">能動/受動</span></span>
-      <span class="v-lat">2 opt.<br><span style="font-size:0.70rem;color:var(--latin)">act./pass.</span></span>
-      <span class="v-en">2 opt.<br><span style="font-size:0.70rem;color:var(--latin)">act./pass.</span></span>
-      <span class="v-zh">2选<br><span style="font-size:0.70rem;color:var(--latin)">主动/被动</span></span>
-    </td>
-    <td class="val">
-      <span class="v-ja">2択<br><span style="font-size:0.70rem;color:var(--latin)">完了/×</span></span>
-      <span class="v-lat">2 opt.<br><span style="font-size:0.70rem;color:var(--latin)">perf./×</span></span>
-      <span class="v-en">2 opt.<br><span style="font-size:0.70rem;color:var(--latin)">perf./×</span></span>
-      <span class="v-zh">2选<br><span style="font-size:0.70rem;color:var(--latin)">完成/×</span></span>
-    </td>
-    <td class="val">
-      <span class="v-ja">3択<br><span style="font-size:0.70rem;color:var(--latin)">現在/未来/×</span></span>
-      <span class="v-lat">3 opt.<br><span style="font-size:0.70rem;color:var(--latin)">praes./fut./×</span></span>
-      <span class="v-en">3 opt.<br><span style="font-size:0.70rem;color:var(--latin)">pres./fut./×</span></span>
-      <span class="v-zh">3选<br><span style="font-size:0.70rem;color:var(--latin)">现在/将来/×</span></span>
-    </td>
-    <td class="cross sep">×</td>
-    <td class="categ">
-      <span class="v-ja">3範疇</span><span class="v-lat">3 categ.</span><span class="v-en">3 categ.</span><span class="v-zh">3类</span>
-    </td>
-    <td class="zero sep">
-      <span class="v-ja">0範疇</span><span class="v-lat">0 categ.</span><span class="v-en">0 categ.</span><span class="v-zh">0类</span>
-    </td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-  </tr>
+    <a class="card" href="latin_grammar_advanced.html">
+      <div class="card-label">
+        <span class="txt-ja">tabula grammatica · ラテン語文法図示表</span>
+        <span class="txt-lat">tabula grammatica</span>
+        <span class="txt-en">Latin Grammar Diagram</span>
+        <span class="txt-zh">拉丁语语法图示表</span>
+      </div>
+      <div class="card-title">
+        <span class="txt-ja">ラテン語文法図示表 — Tabula Grammatica Latina</span>
+        <span class="txt-lat">Tabula Grammatica Latina</span>
+        <span class="txt-en">Latin Grammar Diagram — Tabula Grammatica Latina</span>
+        <span class="txt-zh">拉丁语语法图示表 — Tabula Grammatica Latina</span>
+      </div>
+      <span class="card-arrow">→</span>
+      <div class="card-desc">
+        <span class="btxt-ja">カエサル『ガリア戦記』冒頭文の全単語を品詞・格・数・性・態・時制・法ごとに図示。日本語・Latine・English・中文対応。</span>
+        <span class="btxt-lat">Tabulam grammaticam omnium verborum primi capitis Commentariorum de Bello Gallico praebet. Linguis Iaponice, Latine, Anglice, Sinice scripta.</span>
+        <span class="btxt-en">A grammatical diagram of every word in the opening sentence of Caesar's <i>Gallic War</i>, covering part of speech, case, number, gender, voice, tense, and mood. Available in Japanese, Latin, English, and Chinese.</span>
+        <span class="btxt-zh">凯撒《高卢战记》开篇句全词语法图示，涵盖词性、格、数、性、态、时态、语气。支持日语・拉丁语・英语・中文。</span>
+      </div>
+    </a>
 
-  <!-- スピーヌム supinum -->
-  <tr>
-    <td>
-      <span class="v-ja">スピーヌム<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">supinum</span></span>
-      <span class="v-lat">supinum</span>
-      <span class="v-en">Supine<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">supinum</span></span>
-      <span class="v-zh">目的动名词<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">supinum</span></span>
-    </td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross sep">×</td>
-    <td class="zero">
-      <span class="v-ja">0範疇</span><span class="v-lat">0 categ.</span><span class="v-en">0 categ.</span><span class="v-zh">0类</span>
-    </td>
-    <td class="categ sep">
-      <span class="v-ja">1範疇</span><span class="v-lat">1 categ.</span><span class="v-en">1 categ.</span><span class="v-zh">1类</span>
-    </td>
-    <td class="val">
-      <span class="v-ja">2択<br><span style="font-size:0.70rem;color:var(--latin)">対格/奪格</span></span>
-      <span class="v-lat">2 opt.<br><span style="font-size:0.70rem;color:var(--latin)">acc./abl.</span></span>
-      <span class="v-en">2 opt.<br><span style="font-size:0.70rem;color:var(--latin)">acc./abl.</span></span>
-      <span class="v-zh">2选<br><span style="font-size:0.70rem;color:var(--latin)">宾格/夺格</span></span>
-    </td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-  </tr>
+    <a class="card" href="verbalia.html">
+      <div class="card-label">
+        <span class="txt-ja">verbalia latina · ラテン語準動詞一覧</span>
+        <span class="txt-lat">verbalia latina</span>
+        <span class="txt-en">Latin Verbal Forms</span>
+        <span class="txt-zh">拉丁语准动词一览</span>
+      </div>
+      <div class="card-title">
+        <span class="txt-ja">ラテン語準動詞一覧 — Verbalia Latina</span>
+        <span class="txt-lat">Verbalia Latina</span>
+        <span class="txt-en">Latin Verbal Forms — Verbalia Latina</span>
+        <span class="txt-zh">拉丁语准动词一览 — Verbalia Latina</span>
+      </div>
+      <span class="card-arrow">→</span>
+      <div class="card-desc">
+        <span class="btxt-ja">分詞・不定詞・スピーヌム・動名詞・動形容詞の文法範疇を一覧表で比較。日本語・Latine・English・中文対応。</span>
+        <span class="btxt-lat">Categorias grammaticas verbalium (participii, infinitivi, supini, gerundii, gerundivi) in tabula comparat. Linguis Iaponice, Latine, Anglice, Sinice scripta.</span>
+        <span class="btxt-en">Compares the grammatical categories of Latin verbal forms: participle, infinitive, supine, gerund, and gerundive. Available in Japanese, Latin, English, and Chinese.</span>
+        <span class="btxt-zh">以表格比较分词、不定式、目的动名词、动名词、动形容词的语法范畴。支持日语・拉丁语・英语・中文。</span>
+      </div>
+    </a>
 
-  <!-- 動名詞 gerundium -->
-  <tr>
-    <td>
-      <span class="v-ja">動名詞<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">gerundium</span></span>
-      <span class="v-lat">gerundium</span>
-      <span class="v-en">Gerund<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">gerundium</span></span>
-      <span class="v-zh">动名词<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">gerundium</span></span>
-    </td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross sep">×</td>
-    <td class="zero">
-      <span class="v-ja">0範疇</span><span class="v-lat">0 categ.</span><span class="v-en">0 categ.</span><span class="v-zh">0类</span>
-    </td>
-    <td class="categ sep">
-      <span class="v-ja">1範疇</span><span class="v-lat">1 categ.</span><span class="v-en">1 categ.</span><span class="v-zh">1类</span>
-    </td>
-    <td class="val">
-      <span class="v-ja">4択<br><span style="font-size:0.70rem;color:var(--latin)">属格/与格/対格/奪格</span></span>
-      <span class="v-lat">4 opt.<br><span style="font-size:0.70rem;color:var(--latin)">gen./dat./acc./abl.</span></span>
-      <span class="v-en">4 opt.<br><span style="font-size:0.70rem;color:var(--latin)">gen./dat./acc./abl.</span></span>
-      <span class="v-zh">4选<br><span style="font-size:0.70rem;color:var(--latin)">属格/与格/宾格/夺格</span></span>
-    </td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-  </tr>
-
-  <!-- 動形容詞 gerundivum -->
-  <tr>
-    <td>
-      <span class="v-ja">動形容詞<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">gerundivum</span></span>
-      <span class="v-lat">gerundivum</span>
-      <span class="v-en">Gerundive<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">gerundivum</span></span>
-      <span class="v-zh">动形容词<br><span style="font-weight:400;font-size:0.75rem;color:var(--latin);font-style:italic">gerundivum</span></span>
-    </td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross">×</td>
-    <td class="cross sep">×</td>
-    <td class="zero">
-      <span class="v-ja">0範疇</span><span class="v-lat">0 categ.</span><span class="v-en">0 categ.</span><span class="v-zh">0类</span>
-    </td>
-    <td class="categ sep">
-      <span class="v-ja">3範疇</span><span class="v-lat">3 categ.</span><span class="v-en">3 categ.</span><span class="v-zh">3类</span>
-    </td>
-    <td class="val">
-      <span class="v-ja">6択</span><span class="v-lat">6 opt.</span><span class="v-en">6 opt.</span><span class="v-zh">6选</span>
-    </td>
-    <td class="val">
-      <span class="v-ja">2択</span><span class="v-lat">2 opt.</span><span class="v-en">2 opt.</span><span class="v-zh">2选</span>
-    </td>
-    <td class="val">
-      <span class="v-ja">3択</span><span class="v-lat">3 opt.</span><span class="v-en">3 opt.</span><span class="v-zh">3选</span>
-    </td>
-  </tr>
-
-  </tbody>
-  </table>
   </div>
 
-  <button class="copy-btn" onclick="copyTSV()">
-    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4 2h7a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm0 1v9h7V3H4zM2 4v9h8v1H2a1 1 0 0 1-1-1V4h1z"/>
-    </svg>
-    <span id="tsv-btn-label">TSV をコピー ↗</span>
-  </button>
+  <footer>Grammatica Latina · tunbawang.github.io/latin-grammar</footer>
+
 </div>
 
 <script>
-let currentLang = 'ja';
-
 function setLang(lang) {
-  currentLang = lang;
   document.body.className = 'mode-' + lang;
   document.querySelectorAll('.lang-btn').forEach((btn, i) => {
-    const modes = ['ja','lat','en','zh'];
+    const modes = ['ja', 'lat', 'en', 'zh'];
     btn.classList.toggle('active', modes[i] === lang);
-  });
-  const titles = {
-    ja:  'ラテン語準動詞一覧 — Verbalia Latina',
-    lat: 'Verbalia Latina',
-    en:  'Latin Verbal Forms — Verbalia Latina',
-    zh:  '拉丁语准动词一览 — Verbalia Latina'
-  };
-  document.getElementById('page-title').textContent = titles[lang];
-  const btnLabels = {
-    ja:  'TSV をコピー ↗',
-    lat: 'TSV describere ↗',
-    en:  'Copy TSV ↗',
-    zh:  '复制 TSV ↗'
-  };
-  document.getElementById('tsv-btn-label').textContent = btnLabels[lang];
-}
-
-function getCell(td, lang) {
-  const span = td.querySelector('.v-' + lang);
-  if (span) return span.textContent.trim().replace(/\s+/g, ' ');
-  return td.textContent.trim().replace(/\s+/g, ' ');
-}
-
-function copyTSV() {
-  const rows = document.querySelectorAll('thead tr, tbody tr');
-  const lines = [];
-  rows.forEach(tr => {
-    const cells = tr.querySelectorAll('th, td');
-    const row = [];
-    cells.forEach(td => { row.push(getCell(td, currentLang).replace(/\n/g, ' ')); });
-    lines.push(row.join('\t'));
-  });
-  navigator.clipboard.writeText(lines.join('\n')).then(() => {
-    const label = document.getElementById('tsv-btn-label');
-    const orig = label.textContent;
-    const copied = { ja:'コピーしました！', lat:'Descriptum!', en:'Copied!', zh:'已复制！' };
-    label.textContent = copied[currentLang] || 'Copied!';
-    setTimeout(() => { label.textContent = orig; }, 1800);
   });
 }
 </script>
