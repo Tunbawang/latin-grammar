@@ -127,9 +127,9 @@
 </head>
 <body class="mode-both">
 <div class="container">
-  <h1 id="page-title">ラテン語文法解析表</h1>
+  <h1 id="page-title">ラテン語文法図示表</h1>
   <p class="sentence">Gallia est omnis dīvīsa in partēs trēs, quārum ūnam incolunt Belgae, aliam Aquītānī, tertiam quī ipsōrum linguā Celtae, nostrā Gallī appellantur.</p>
-  <p class="sentence translation trans-ja">ガリア全体は三つの部分に分けられており、その一つにはベルガエ人が、別の一つにはアクィタニア人が、三番目には彼ら自身の言語でケルタエ、我々の言語でガリーと呼ばれる者たちが住んでいる。</p>
+  <p class="sentence translation trans-ja">ガリアは全体が三つの部分に分けられており、その一つにはベルガエ人が、別の一つにはアクィタニア人が、三番目には彼ら自身の言語でケルタエ、我々の言語でガリーと呼ばれる者が住んでいる。</p>
   <p class="sentence translation trans-lat" style="font-style:normal;">Ἡ Γαλατία ὅλη εἰς τρία μέρη διῄρηται, ὧν ἓν οἱ Βέλγαι κατοικοῦσιν, ἄλλο οἱ Ἀκυιτανοί, τρίτον οἱ τῇ μὲν ἰδίᾳ γλώσσῃ Κελταί, τῇ δὲ ἡμετέρᾳ Γαλάται καλούμενοι.</p>
   <p class="sentence translation trans-en">Gaul as a whole is divided into three parts, one of which the Belgae inhabit, another the Aquitani, and the third those who in their own language are called Celts, in ours Gauls.</p>
   <p class="sentence translation trans-zh">高卢整体上被分为三个部分：其中一部分由贝尔盖人居住，另一部分由阿基坦人居住，第三部分由那些在他们自己的语言中被称为凯尔特人、在我们的语言中被称为高卢人的人们居住。</p>
@@ -1127,11 +1127,11 @@ function setLang(lang) {
     btn.classList.toggle('active', modes[i] === lang);
   });
   const titles = {
-    ja:   'ラテン語文法解析表',
-    both: 'ラテン語文法解析表',
+    ja:   'ラテン語文法図示表',
+    both: 'ラテン語文法図示表',
     lat:  'Tabula Grammatica Latina',
-    en:   'Latin Grammar Analysis Table',
-    zh:   '拉丁语语法分析表'
+    en:   'Latin Grammar Diagram',
+    zh:   '拉丁语语法图示表'
   };
   document.getElementById('page-title').textContent = titles[lang];
 
