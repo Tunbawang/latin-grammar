@@ -122,6 +122,7 @@
   body.mode-both .th-ja       { display: block; }
   body.mode-both .th-lat      { display: block; font-size: 0.68rem; font-weight: 400; color: var(--latin); font-style: italic; }
   body.mode-both .th-note     { display: block; font-size: 0.70rem; font-weight: 400; color: var(--latin); font-style: italic; margin-top: 3px; }
+  body.mode-both .th-note-lat { display: block; font-size: 0.68rem; font-weight: 400; color: var(--latin); font-style: italic; }
 
   .copy-btn {
     margin-top: 14px; display: inline-flex; align-items: center; gap: 6px;
@@ -1418,33 +1419,76 @@ function setLang(lang) {
   document.getElementById('tsv-btn-label').textContent = btnLabels[lang];
 }
 
-function getCell(td, lang) {
-  const span = td.querySelector('.txt-' + lang);
-  if (span) return span.textContent.trim();
+// span クラスから1テキストを取得するユーティリティ
+function spanText(td, cls) {
+  const s = td.querySelector('.' + cls);
+  return s ? s.textContent.trim() : '';
+}
+
+// セル1個のテキストを取得（both モードは日本語のみ・ラテン語のみ別々に取得して呼び出し側で処理）
+function getCellLang(td, lang) {
+  // ヘッダーセル
+  if (td.querySelector('.th-ja')) {
+    const noteKey = { lat: 'th-note-lat', en: 'th-note-en', zh: 'th-note-zh' }[lang] || 'th-note';
+    const head = spanText(td, 'th-' + lang);
+    const note = spanText(td, noteKey);
+    return [head, note].filter(Boolean).join('\n');
+  }
+  // データセル（txt-xx span あり）
+  if (td.querySelector('.txt-ja')) {
+    return spanText(td, 'txt-' + lang);
+  }
+  // spanなし（語形セル: est, Gallia など）
   return td.textContent.trim();
 }
 
+// TSV用にセル値をクォート（タブ・改行・ダブルクォートを含む場合）
+function quoteTSV(val) {
+  if (val.includes('\t') || val.includes('\n') || val.includes('"')) {
+    return '"' + val.replace(/"/g, '""') + '"';
+  }
+  return val;
+}
+
 function copyTSV() {
-  const lang = currentLang === 'both' ? 'ja' : currentLang;
+  const lang = currentLang;
   const rows = document.querySelectorAll('thead tr, tbody tr');
   const lines = [];
+
   rows.forEach(tr => {
     const cells = tr.querySelectorAll('th, td');
     const row = [];
     cells.forEach(td => {
       const colspan = parseInt(td.getAttribute('colspan') || '1');
-      const txt = getCell(td, lang).replace(/\n/g, ' ');
-      row.push(txt);
+      let val;
+      if (lang === 'both') {
+        if (td.querySelector('.th-ja')) {
+          // ヘッダーセル：人称 / persona / 3択 / 3 opt. の順で4段
+          const jaHead  = spanText(td, 'th-ja');
+          const latHead = spanText(td, 'th-lat');
+          const jaNote  = spanText(td, 'th-note');
+          const latNote = spanText(td, 'th-note-lat');
+          val = [jaHead, latHead, jaNote, latNote].filter(Boolean).join('\n');
+        } else {
+          // データセル：日本語 / ラテン語 の2段
+          const ja  = getCellLang(td, 'ja');
+          const lat = getCellLang(td, 'lat');
+          if (ja && lat && ja !== lat) val = ja + '\n' + lat;
+          else val = ja || lat;
+        }
+      } else {
+        val = getCellLang(td, lang);
+      }
+      row.push(quoteTSV(val));
       for (let i = 1; i < colspan; i++) row.push('');
     });
     lines.push(row.join('\t'));
   });
-  const tsv = lines.join('\n');
-  navigator.clipboard.writeText(tsv).then(() => {
-    const btn = document.querySelector('.copy-btn');
+
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
     const label = document.getElementById('tsv-btn-label');
     const orig = label.textContent;
-    label.textContent = currentLang === 'zh' ? '已复制！' : currentLang === 'en' ? 'Copied!' : currentLang === 'lat' ? 'Descriptum!' : 'コピーしました！';
+    label.textContent = lang === 'zh' ? '已复制！' : lang === 'en' ? 'Copied!' : lang === 'lat' ? 'Descriptum!' : 'コピーしました！';
     setTimeout(() => { label.textContent = orig; }, 1800);
   });
 }
